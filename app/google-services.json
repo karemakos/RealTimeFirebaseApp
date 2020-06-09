@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "436949877807",
+    "firebase_url": "https://fir-loginpractice-4e736.firebaseio.com",
+    "project_id": "fir-loginpractice-4e736",
+    "storage_bucket": "fir-loginpractice-4e736.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436949877807:android:19c4ce5831b90104cc72da",
+        "android_client_info": {
+          "package_name": "com.calc.firebaseloginpractice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436949877807-caktlq0l5hu6clr6fibd0ql86rtgoibt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARy_CTMtjBTNw-V6p9ZW3xCTRvDv1GY7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436949877807-caktlq0l5hu6clr6fibd0ql86rtgoibt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
