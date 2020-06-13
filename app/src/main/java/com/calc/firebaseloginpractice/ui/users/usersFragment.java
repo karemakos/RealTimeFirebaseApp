@@ -1,26 +1,20 @@
 package com.calc.firebaseloginpractice.ui.users;
 
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calc.firebaseloginpractice.R;
-import com.calc.firebaseloginpractice.models.postModel;
 import com.calc.firebaseloginpractice.models.userModel;
 import com.calc.firebaseloginpractice.ui.chats.chatsFragment;
-import com.calc.firebaseloginpractice.ui.timeline.posts.newPostFragment;
-import com.calc.firebaseloginpractice.ui.timeline.timeLineFragment;
 import com.calc.firebaseloginpractice.utils.constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +44,7 @@ public class usersFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
        // constants.initProgress(getContext(),"Please wait...");
-        initVies();
+        initViewa();
         getUsers();
 
 }
@@ -91,7 +85,7 @@ public class usersFragment extends Fragment
         });
     }
 
-    private void initVies()
+    private void initViewa()
     {
         recyclerView=mainView.findViewById(R.id.users_recycler);
         DividerItemDecoration dividerItemDecoration= new DividerItemDecoration(requireActivity(),DividerItemDecoration.VERTICAL);
@@ -115,7 +109,7 @@ public class usersFragment extends Fragment
         @NonNull
         @Override
         public usersAdapter.VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(requireContext()).inflate(R.layout.users_item, parent, false);
+            View view = LayoutInflater.from(requireContext()).inflate(R.layout.item_users, parent, false);
             return new usersAdapter.VH(view);
         }
 

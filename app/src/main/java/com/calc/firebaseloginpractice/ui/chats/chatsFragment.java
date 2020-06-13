@@ -1,13 +1,9 @@
 package com.calc.firebaseloginpractice.ui.chats;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,32 +14,25 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 
-import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calc.firebaseloginpractice.R;
 import com.calc.firebaseloginpractice.models.chatModel;
 import com.calc.firebaseloginpractice.models.myChatsModel;
-import com.calc.firebaseloginpractice.models.userModel;
 import com.calc.firebaseloginpractice.ui.profile.profileFragment;
-import com.calc.firebaseloginpractice.ui.users.usersFragment;
 import com.calc.firebaseloginpractice.ui.welcome.welcomeFragment;
 import com.calc.firebaseloginpractice.utils.constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class chatsFragment extends Fragment
 {
@@ -262,7 +251,7 @@ public class chatsFragment extends Fragment
             }
 
 
-            stSeen(model.getId());
+            setSeen(model.getId());
             isSeen(model.getId(),holder.seenOne,holder.seenTwo);
 
         }
@@ -276,11 +265,10 @@ public class chatsFragment extends Fragment
 
 
         // for seen purpose
-        void stSeen(String id)
-        {
+        void setSeen(String id)
+        {//Question what the different between the String id and constants.getUid
             constants.getDatabaseReference().child("Seen").child(constants.getUid(requireActivity()))
                     .child(constants.myChats.getUid()).child(id).setValue(true);
-
 
         }
         void isSeen(final String id, final ImageView imageView,final ImageView imageViewTwo)

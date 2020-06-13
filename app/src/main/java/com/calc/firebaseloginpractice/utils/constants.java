@@ -23,8 +23,6 @@ public  class constants
     public static userModel myChats;
 
 
-    // this is for the comment
-    public static userModel userComment;
     // this is to use it for the comments
     public static postModel postModel;
 

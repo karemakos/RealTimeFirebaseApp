@@ -67,7 +67,6 @@ public class timeLineFragment extends Fragment
                 postModels.clear();
 
                 // this to get all the posts to show on the timeline, that's why we put for each loop cuz its not only one post will show it's a punch of posts
-
                 for (DataSnapshot d : dataSnapshot.getChildren())
                 {
                     postModel model= d.getValue(postModel.class);
@@ -124,7 +123,7 @@ public class timeLineFragment extends Fragment
         @NonNull
         @Override
         public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(requireContext()).inflate(R.layout.post_item, parent, false);
+            View view = LayoutInflater.from(requireContext()).inflate(R.layout.item_post, parent, false);
             return new VH(view);
         }
 
@@ -144,7 +143,6 @@ public class timeLineFragment extends Fragment
                 long time = model.getPostTime();
                 String userImage = model.getUserImage();
                 String text = model.getPostText();
-
 
 
                 holder.postUserName.setText(name);
@@ -205,6 +203,8 @@ public class timeLineFragment extends Fragment
             holder.postComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+
 
                     constants.postModel= model;
                     constants.replaceFragment(timeLineFragment.this,new postComments(),true);

@@ -6,6 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Toolbar
+        android:id="@+id/comments_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        app:titleTextColor="@color/white"/>
 
 <LinearLayout
     android:padding="20dp"
