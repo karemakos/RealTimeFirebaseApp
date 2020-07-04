@@ -1,16 +1,13 @@
 package com.calc.firebaseloginpractice.ui.chats;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,20 +15,17 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 
-import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calc.firebaseloginpractice.R;
-import com.calc.firebaseloginpractice.models.chatModel;
 import com.calc.firebaseloginpractice.models.myChatsModel;
+import com.calc.firebaseloginpractice.models.chatModel;
 import com.calc.firebaseloginpractice.models.userModel;
 import com.calc.firebaseloginpractice.ui.profile.profileFragment;
-import com.calc.firebaseloginpractice.ui.users.usersFragment;
 import com.calc.firebaseloginpractice.ui.welcome.welcomeFragment;
 import com.calc.firebaseloginpractice.utils.constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,10 +43,11 @@ public class chatsFragment extends Fragment
 {
     private View mainView;
     private RecyclerView recyclerView;
-
     private EditText chatFiled;
     private FloatingActionButton sendFab;
     private Toolbar toolbar;
+    private TextView chatUsername;
+    private CircleImageView chatUserImage;
 
     private List<chatModel> chatModels;
 
@@ -60,6 +55,8 @@ public class chatsFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView= inflater.inflate(R.layout.fragment_chats,null);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
         return mainView;
     }
 
@@ -69,6 +66,7 @@ public class chatsFragment extends Fragment
 
        initViews();
        getChat();
+
     }
 
     private void getChat()
@@ -107,12 +105,15 @@ public class chatsFragment extends Fragment
         });
     }
 
+
     private void initViews()
     {
         recyclerView=mainView.findViewById(R.id.chat_recycler);
         chatFiled=mainView.findViewById(R.id.message_body_field);
         sendFab=mainView.findViewById(R.id.send_message_fab);
         toolbar=mainView.findViewById(R.id.chat_toolbar);
+        chatUsername=mainView.findViewById(R.id.privateChat_user_name);
+        chatUserImage=mainView.findViewById(R.id.privateChat_user_image);
 
         chatModels= new ArrayList<>();
 
@@ -124,34 +125,17 @@ public class chatsFragment extends Fragment
                 String message = chatFiled.getText().toString();
 
 
-                if (!message.isEmpty())
+                if (message.isEmpty())
                 {
-                    sendMessage(message);
+                    constants.showToast(requireContext(), "Please your Message");
+                    return;
+
                 }
+                sendMessage(message);
 
             }
         });
 
-        toolbar.inflateMenu(R.menu.main_menu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item)
-            {
-                switch (item.getItemId())
-                {
-                    case R.id.main_logout_btn:
-                        constants.getAuth().signOut();
-                        constants.saveUid(requireActivity(),"empty");
-                        constants.replaceFragment(chatsFragment.this,new welcomeFragment(),false);
-                        break;
-                    case R.id.main_settings_btn:
-                        constants.replaceFragment(chatsFragment.this,new profileFragment(),true);
-
-                        break;
-                }
-                return false;
-            }
-        });
 
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_white_ios_24);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -161,20 +145,18 @@ public class chatsFragment extends Fragment
             }
         });
 
+        chatUsername.setText(constants.myChats.getName());
 
-//        requireActivity().setActionBar(toolbar);
-//        requireActivity().getActionBar().setTitle("");
-//        requireActivity().getActionBar().setTitle(constants.myChats.getName());
-//        requireActivity().getActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_baseline_arrow_white_ios_24));
-//        requireActivity().setActionBar((Toolbar) menu.getItem(R.menu.main_menu));
-
-
+        Picasso
+                .get()
+                .load(constants.myChats.getImageUri())
+                .into(chatUserImage);
     }
 
     private void sendMessage(String message)
     {
         final String senderId =constants.getUid(requireActivity());
-        String receivedId =constants.myChats.getUid();
+        final String receivedId =constants.myChats.getUid();
 
         // this is hollamy to make the message ID in order to include msg id between two users
         final String key= constants.getDatabaseReference().child("Chats").child(senderId).child(receivedId).push().getKey();
@@ -202,9 +184,23 @@ public class chatsFragment extends Fragment
             constants.getDatabaseReference().child("Chats").child(receivedId).child(senderId).child(key).setValue(chatModel);
 
 
+
             // we will not get key here cuz this only to read from the list of the friends like the mainpage of whatsapp
-            constants.getDatabaseReference().child("MyChats").child(senderId).child(receivedId).setValue(myChatsModel);
-            constants.getDatabaseReference().child("MyChats").child(receivedId).child(senderId).setValue(myChatsModel);
+            constants.getDatabaseReference().child("MyChats").child(senderId).child(receivedId).setValue(constants.myChats);
+            constants.getDatabaseReference().child("users").child(constants.getUid(requireActivity())).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    userModel userModel=dataSnapshot.getValue(userModel.class);
+                    constants.getDatabaseReference().child("MyChats").child(receivedId).child(senderId).setValue(userModel);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
 
             chatFiled.setText("");
 
@@ -226,7 +222,7 @@ public class chatsFragment extends Fragment
         @Override
         public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
         {
-            View view = LayoutInflater.from(requireContext()).inflate(R.layout.chat_message_item, parent, false);
+            View view = LayoutInflater.from(requireContext()).inflate(R.layout.item_chat_message, parent, false);
             return new VH(view);
         }
 
@@ -262,7 +258,7 @@ public class chatsFragment extends Fragment
             }
 
 
-            stSeen(model.getId());
+            setSeen(model.getId());
             isSeen(model.getId(),holder.seenOne,holder.seenTwo);
 
         }
@@ -276,11 +272,10 @@ public class chatsFragment extends Fragment
 
 
         // for seen purpose
-        void stSeen(String id)
-        {
+        void setSeen(String id)
+        {//Question what the different between the String id and constants.getUid
             constants.getDatabaseReference().child("Seen").child(constants.getUid(requireActivity()))
                     .child(constants.myChats.getUid()).child(id).setValue(true);
-
 
         }
         void isSeen(final String id, final ImageView imageView,final ImageView imageViewTwo)
@@ -338,31 +333,5 @@ public class chatsFragment extends Fragment
 
     }
 
-
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        inflater.inflate(R.menu.main_menu,menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-//    {
-//        switch (item.getItemId())
-//        {
-//            case R.id.main_logout_btn:
-//                constants.getAuth().signOut();
-//                constants.saveUid(requireActivity(),"empty");
-//                constants.replaceFragment(chatsFragment.this,new welcomeFragment(),false);
-//                break;
-//            case R.id.main_settings_btn:
-//                constants.replaceFragment(chatsFragment.this,new profileFragment(),true);
-//
-//                break;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//
-//    }
 
 }

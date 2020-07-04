@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Toolbar
+        android:id="@+id/terms_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        app:titleTextColor="@color/white"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+            android:id="@+id/chat_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/green"
+            app:cardMaxElevation="250dp"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="6dp">
+
+
+              <TextView
+                  android:padding="10dp"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:text="Terms and Conditions  Here are our terms and conditions. Country Specific Terms in Jobaki B shall also apply to this Agreement. Please contact us here if you have any other questions. Thanks for connecting.  The jobaki terms and conditions  updated June 2020  outline jobaki and Your obligations and responsibilities on the Jobaki  Platform. In this update to our Terms and Conditions, Jobaki  has updated information as a result of its new Search Assist feature and added new Country Specific Terms for Greece .  User Agreement: www.jobaki .com  Jobaki  operates an online platform allowing Users to connect through the Jobaki  Platform with other Users who provide Services.  Please read these terms and all Policies including the Community Guidelines carefully before using the Jobaki  Platform. These Policies are incorporated into this Agreement by reference.  All defined terms in this Agreement have the meaning given to them in the Jobaki  Glossary.  1. SCOPE OF JOBAKI  SERVICES    1.1 Jobaki  provides the Jobaki  Platform to enable Posters to publish Posted Tasks. IMPORTANT: whatever will happened between the users from sharing person info like photos phone numbers all personal details address it s the responsibility of the person who shared it, Jobaki doesn t have any responsibility for whatever shared or what will happen between the job sender or receiver, we are not responsible for any legal claims or any country legal issue between jobaki app user    1.2 Jobaki may make an Offer in response to a Posted Task. Some parts of Offer details may be made publicly available, including to internet users who are not Users.    1.3 A Poster may revoke or modify a Posted Task at any time before he she accepts an Offer. Jobaki  reserves the right to cancel all Offers on a Posted Task made prior to the modification.    1.4 If a Poster accepts an Offer on the Jobaki  Platform, a Task Contract is created between the Jobaki  and the Poster.    1.5 Upon creation of a Task Contract, the Poster must pay the Agreed Price into the Payment Account.    1.6 Upon creation of the Task Contract, Jobaki  has rendered Jobaki  Services and the Service Fee is due and payable.    1.7 Once the Task Contract is created, the Jobaki  and Poster may vary the Task Contract on the Jobaki  Platform. The Poster and Jobaki  are encouraged to use Jobaki  s private messaging system to amend or vary the Task Contract  including the Agreed Price  or to otherwise communicate.    1.8 Once the Services are complete, the Jobaki  must provide notice of that on the Jobaki  Platform.    1.9 Once the Services are complete, the Poster must provide notice of that on the Jobaki  Platform.    1.10 Once the Posted Task has been completed and the Poster confirms the Services are completed, or if Jobaki  is satisfied the Services have been completed, the Jobaki  Funds will be released by Jobaki  from the Payment Account to the Jobaki . However this process does not apply to the payment of Recurring Services which is addressed in clause 1.16 below.    1.11 After the Task Contract is completed, the parties are encouraged to review and provide feedback of the Services on the Jobaki  Platform.    1.12 Jobaki  may also provide a Search Assist feature enabling Posters to submit an Offer for Services.    1.13 An Offer submitted by a Poster using Search Assist may be notified to other Users and such Users may elect to make an Instant Claim of it.    1.14 When using Search Assist a Task Contract is created when a Jobaki  makes an Instant Claim  and in the case of Recurring Services a Task Contract is created for the first Occurrence only . For Recurring Services, the next Task Contract is created upon completion of the previous Occurrence.    1.15 A Poster may revoke or modify its Offer in using Search Assist, including for Recurring Services, at any time before a Jobaki  makes an Instant Claim. Jobaki  reserves the right to cancel all Posted Tasks made prior to the revocation or modification.    1.16 For Recurring Services and subject to clause 1.17, once the Occurrence has been completed and the Jobaki  confirms the Occurrence is completed  or if Jobaki  is satisfied the Occurrence is completed  then the Jobaki  Funds for that Occurrence will automatically be released by Jobaki  from the Payment Account to the Jobaki .    1.17 The Poster may elect to pause automatic payment of Jobaki  Funds for an Occurrence within 24 hours from when the Jobaki  confirms the Occurrence is completed. If the Poster pauses such automatic payment in accordance with this clause, then the Jobaki  Funds will not be released by Jobaki  from the Payment Account to the Jobaki  until the Poster also confirms that the Occurrence is completed.
+                  Jobaki not responsible for any legal issue between the users from deals or sharing private information's, we don't show any proof or any documentations
+                   Revised June 2020 copyright Jobaki  2020  "
+                  android:textColor="@color/white"/>
+        </androidx.cardview.widget.CardView>
+
+
+
+    </ScrollView>
+
+
+</LinearLayout>

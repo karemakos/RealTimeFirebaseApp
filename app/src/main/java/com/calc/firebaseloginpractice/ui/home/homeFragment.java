@@ -15,8 +15,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.calc.firebaseloginpractice.R;
-import com.calc.firebaseloginpractice.ui.myChats.chatsFragment;
+import com.calc.firebaseloginpractice.ui.myChats.myChatsFragment;
 import com.calc.firebaseloginpractice.ui.profile.profileFragment;
+import com.calc.firebaseloginpractice.ui.rooms.RoomsFragment;
+import com.calc.firebaseloginpractice.ui.rooms.myRoomsFragment;
+import com.calc.firebaseloginpractice.ui.rooms.roomsRequestsFragment;
 import com.calc.firebaseloginpractice.ui.timeline.timeLineFragment;
 import com.calc.firebaseloginpractice.ui.users.usersFragment;
 import com.calc.firebaseloginpractice.ui.welcome.welcomeFragment;
@@ -53,22 +56,24 @@ public class homeFragment extends Fragment
         viewPager2= mainView.findViewById(R.id.viewPager);
         tabLayout= mainView.findViewById(R.id.tabs);
 
-
-
-
         //2- Tablayout Adapter to link it
         List<Fragment> fragments= new ArrayList<>();
         fragments.add(new timeLineFragment());
         fragments.add(new usersFragment());
-        fragments.add(new chatsFragment());
+        fragments.add(new RoomsFragment());
+        fragments.add(new myRoomsFragment());
         fragments.add(new profileFragment());
+        fragments.add(new myChatsFragment());
+
 
         // 2-to link the TabLayout to the ViewPager2
         final List<String> names= new ArrayList<>();
        names.add("Home");
        names.add("Users");
-       names.add("Chats");
+       names.add("Rooms");
+       names.add("My Rooms");
        names.add("Profile");
+       names.add("My chats");
 
 
         tabsAdapter adapter= new tabsAdapter(this,  fragments);

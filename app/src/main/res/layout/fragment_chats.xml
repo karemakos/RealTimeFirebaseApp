@@ -6,12 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Toolbar
-        android:id="@+id/chat_toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        app:titleTextColor="@color/white"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/colorAccent">
+
+        <Toolbar
+            android:id="@+id/chat_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            app:titleTextColor="@color/white"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/privateChat_user_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/m"/>
+
+        <TextView
+            android:id="@+id/privateChat_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kimo"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:layout_marginStart="15dp"/>
+
+    </LinearLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -20,7 +46,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/chat_message_item"
+        tools:listitem="@layout/item_chat_message"
         android:orientation="vertical"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>

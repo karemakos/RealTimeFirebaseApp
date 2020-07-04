@@ -1,11 +1,14 @@
 package com.calc.firebaseloginpractice.ui.timeline;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.contentcapture.DataRemovalRequest;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +18,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calc.firebaseloginpractice.R;
+import com.calc.firebaseloginpractice.models.chatModel;
 import com.calc.firebaseloginpractice.models.postModel;
+import com.calc.firebaseloginpractice.models.userModel;
+import com.calc.firebaseloginpractice.ui.chats.chatsFragment;
+import com.calc.firebaseloginpractice.ui.profile.fragmentUsersProfile;
+import com.calc.firebaseloginpractice.ui.profile.profileFragment;
 import com.calc.firebaseloginpractice.ui.timeline.posts.newPostFragment;
 import com.calc.firebaseloginpractice.ui.timeline.posts.postComments.postComments;
 import com.calc.firebaseloginpractice.utils.constants;
@@ -37,6 +45,11 @@ public class timeLineFragment extends Fragment
     private FloatingActionButton addPost;
     private TextView addComments;
     private List<postModel> postModels;
+    private TextView nameFiled;
+    private TextView emailFiled;
+    private TextView mobileFiled;
+    private TextView addressFiled;
+    private ImageView userImage;
 
     @Nullable
     @Override
@@ -67,7 +80,6 @@ public class timeLineFragment extends Fragment
                 postModels.clear();
 
                 // this to get all the posts to show on the timeline, that's why we put for each loop cuz its not only one post will show it's a punch of posts
-
                 for (DataSnapshot d : dataSnapshot.getChildren())
                 {
                     postModel model= d.getValue(postModel.class);
@@ -84,13 +96,13 @@ public class timeLineFragment extends Fragment
                     recyclerView.smoothScrollToPosition(postModels.size()-1);
                 }
 
+
                 constants.dismissProgress();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError)
             {
-
             }
         });
     }
@@ -124,7 +136,7 @@ public class timeLineFragment extends Fragment
         @NonNull
         @Override
         public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(requireContext()).inflate(R.layout.post_item, parent, false);
+            View view = LayoutInflater.from(requireContext()).inflate(R.layout.item_post, parent, false);
             return new VH(view);
         }
 
@@ -141,13 +153,21 @@ public class timeLineFragment extends Fragment
                 holder.post_image.setVisibility(View.GONE);
 
                 String name = model.getUsername();
-                long time = model.getPostTime();
-                String userImage = model.getUserImage();
+                final long time = model.getPostTime();
+                final String userImage = model.getUserImage();
                 String text = model.getPostText();
 
 
 
                 holder.postUserName.setText(name);
+                holder.postUserName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        constants.postModel= model;
+                        constants.replaceFragment(timeLineFragment.this,new profileFragment(),true);
+                    }
+                });
 
                 long now = System.currentTimeMillis();
 
@@ -164,6 +184,14 @@ public class timeLineFragment extends Fragment
                 setLikesCount(model.getPostId(),holder.postLikeCount);
                 isLike(model.getPostId(), holder.postLike);
 
+                holder.postComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        constants.postModel= model;
+                        constants.replaceFragment(timeLineFragment.this,new postComments(),true);
+                    }
+                });
 
 
             } else if (type == 1)
@@ -173,6 +201,8 @@ public class timeLineFragment extends Fragment
                 String userImage = model.getUserImage();
                 String text = model.getPostText();
                 String image = model.getPostImage();
+
+
 
 
                 long now = System.currentTimeMillis();
@@ -201,6 +231,12 @@ public class timeLineFragment extends Fragment
                 isLike(model.getPostId(), holder.postLike);
 
             }
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    constants.replaceFragment(timeLineFragment.this,new fragmentUsersProfile(model.getuId()),true);
+                }
+            });
 
             holder.postComment.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -211,11 +247,23 @@ public class timeLineFragment extends Fragment
                 }
             });
 
+            holder.postUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+
+                    String uId= constants.myChats.getUid();
+                    constants.replaceFragment(timeLineFragment.this,new profileFragment(),true);
+
+
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
             return postModelList.size();
+
         }
 
         // we create this method for the likes
@@ -253,6 +301,8 @@ public class timeLineFragment extends Fragment
       }
 
 
+
+
       void isLike(final String postId, final TextView textView)
       {
           constants.getDatabaseReference().child("Likes").child(postId).addValueEventListener(new ValueEventListener() {
@@ -260,17 +310,20 @@ public class timeLineFragment extends Fragment
               public void onDataChange(@NonNull DataSnapshot dataSnapshot)
               {
                   if (dataSnapshot.hasChild(constants.getUid(requireActivity()))) {
-                      // to change the color once when we click like
-                      textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
-                      textView.setText("Dislike");
-                    textView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
+                      if (textView!=null)
+                      {
+                          // to change the color once when we click like
+                          textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(),R.color.like));
+                          textView.setOnClickListener(new View.OnClickListener() {
+                              @Override
+                              public void onClick(View v)
+                              {
+                                  constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
 
-                        }
-                    });
+                              }
+                          });
+                      }
+
                   } else
                   {
                       textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.dislike));
@@ -296,6 +349,7 @@ public class timeLineFragment extends Fragment
         private class VH extends RecyclerView.ViewHolder
         {
            private   CircleImageView post_user_image;
+           LinearLayout linearLayout;
             private  ImageView post_image;
             private    TextView postUserName;
             private   TextView postTime;
@@ -304,12 +358,15 @@ public class timeLineFragment extends Fragment
             private     TextView postLike;
             private    TextView postComment;
             private   TextView postShare;
+            boolean isTextViewClicked = false;
+
 
 
             VH(@NonNull View itemView) {
                 super(itemView);
 
                 post_user_image=itemView.findViewById(R.id.post_user_image);
+                linearLayout=itemView.findViewById(R.id.user_info_linear);
                 post_image=itemView.findViewById(R.id.post_image);
                 postUserName=itemView.findViewById(R.id.post_user_name);
                 postTime=itemView.findViewById(R.id.post_time);
@@ -318,6 +375,24 @@ public class timeLineFragment extends Fragment
                 postLike=itemView.findViewById(R.id.post_like);
                 postComment=itemView.findViewById(R.id.timeline_add_comment);
                 postShare=itemView.findViewById(R.id.post_share);
+
+
+
+                // to expand the text view
+                postText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isTextViewClicked)
+                        {
+                            postText.setMaxLines(2);
+                            isTextViewClicked=false;
+                        } else
+                        {
+                            postText.setMaxLines(Integer.MAX_VALUE);
+                            isTextViewClicked=true;
+                        }
+                    }
+                });
             }
         }
     }

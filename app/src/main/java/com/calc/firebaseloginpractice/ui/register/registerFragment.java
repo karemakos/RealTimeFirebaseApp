@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
 import android.widget.EditText;
+import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,9 +18,9 @@ import androidx.fragment.app.Fragment;
 import com.calc.firebaseloginpractice.R;
 import com.calc.firebaseloginpractice.models.userModel;
 import com.calc.firebaseloginpractice.ui.login.loginFragment;
+import com.calc.firebaseloginpractice.ui.terms.termsFragment;
 import com.calc.firebaseloginpractice.utils.constants;
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -42,13 +44,14 @@ public class registerFragment extends Fragment
     private EditText addressFiled;
     private CircleImageView circleImageView;
     private Uri userImage;
-    private Button registerBtn;
+    private TextView registerBtn;
+    private TextView termsRegister;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mainView=inflater.inflate(R.layout.register_fragment,null);
+        mainView=inflater.inflate(R.layout.fragment_register,null);
         return mainView;
     }
 
@@ -69,6 +72,18 @@ public class registerFragment extends Fragment
         addressFiled=mainView.findViewById(R.id.register_address_filed);
         registerBtn=mainView.findViewById(R.id.register_register_btn);
         circleImageView=mainView.findViewById(R.id.pick_user_image);
+        termsRegister=mainView.findViewById(R.id.terms_register);
+
+
+
+
+        termsRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                constants.replaceFragment(registerFragment.this,new termsFragment(),true);
+            }
+        });
 
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override

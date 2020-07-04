@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,6 +52,7 @@ public class newPostFragment extends Fragment
     private Button postBtn;
     private String name;
     private String image;
+    private String uId;
 
     private Uri selectedPostImage;
 
@@ -65,6 +67,7 @@ public class newPostFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         constants.initProgress(requireContext(),"Please Wait...");
         initVies();
@@ -207,8 +210,10 @@ public class newPostFragment extends Fragment
     {
         // i have already created postId in the postModel in order to make id for everyId to be easy to get it whenever i want
         String postId= constants.getDatabaseReference().child("Posts").push().getKey();
+        //>>>>>>
 
-        postModel model= new postModel(image,name,time,text,imageUrl,type,postId);
+
+        postModel model= new postModel(image,name,time,text,imageUrl,type,postId,constants.getUid(requireActivity()));
 
 
         if (postId!=null)
@@ -222,6 +227,7 @@ public class newPostFragment extends Fragment
 
                 }
             });
+
         }
 
 

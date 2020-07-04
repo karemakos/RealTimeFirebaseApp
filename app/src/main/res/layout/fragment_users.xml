@@ -11,14 +11,14 @@
         android:layout_height="wrap_content"
         android:text="Press on users to chat"
         android:layout_margin="20dp"
-        android:textSize="15dp"/>
+        android:textSize="15sp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/users_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/users_item"
+        tools:listitem="@layout/item_users"
         android:orientation="vertical"/>
 
 

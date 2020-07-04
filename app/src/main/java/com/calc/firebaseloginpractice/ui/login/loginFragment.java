@@ -1,13 +1,12 @@
 package com.calc.firebaseloginpractice.ui.login;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,21 +19,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class loginFragment extends Fragment
 {
     private View mainView;
     private EditText emailFiled;
     private EditText passwordFiled;
-    private Button loginBtn;
+    private TextView loginBtn;
 
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mainView=inflater.inflate(R.layout.login_fragment,null);
+        mainView=inflater.inflate(R.layout.fragment_login,null);
         return mainView;
 
     }
@@ -84,15 +81,18 @@ public class loginFragment extends Fragment
                         {
                             constants.saveUid(requireActivity(),task.getResult().getUser().getUid());
                             constants.replaceFragment(loginFragment.this,new  homeFragment(),false);
-                        } else
+                        } else if (!task.getResult().getUser().isEmailVerified())
                         {
-                            constants.showToast(requireContext(),"Incorrect Mail or password");
+
+                            constants.showToast(requireContext(),"Please Check your mailbox to verify your Account");
+
                         }
 
                     }  else
 
                     {
-                        constants.showToast(requireContext(),task.getException().getMessage());
+                      constants.showToast(requireContext(),task.getException().getMessage());
+
                     }
                 }
             });

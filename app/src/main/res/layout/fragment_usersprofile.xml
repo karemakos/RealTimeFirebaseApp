@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="20dp"
+    android:background="@drawable/backgroundwelcome">
+
+
+
+    <Toolbar
+        android:id="@+id/usersProfile_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_gravity="start"
+        app:titleTextColor="@color/white"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:padding="10dp"
+                    android:layout_marginTop="40dp"
+                    android:id="@+id/profile_usersImage"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:src="@drawable/photopicker"
+
+                    />
+
+                <TextView
+                    android:id="@+id/users_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/bold"
+                    android:textSize="28sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/users_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:textColor="@color/white"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:paddingBottom="50dp"/>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/orange"
+                        app:cardMaxElevation="250dp"
+                        android:layout_margin="2dp"
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="6dp"
+
+
+                        >
+
+                        <TextView
+                            android:id="@+id/send_usersMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/pink"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="Send A Message"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+
+
+                            />
+
+                    </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+

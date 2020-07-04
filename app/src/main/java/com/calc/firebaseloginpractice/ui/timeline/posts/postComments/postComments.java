@@ -3,11 +3,14 @@ package com.calc.firebaseloginpractice.ui.timeline.posts.postComments;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +22,10 @@ import com.calc.firebaseloginpractice.R;
 import com.calc.firebaseloginpractice.models.commentModel;
 import com.calc.firebaseloginpractice.models.postModel;
 import com.calc.firebaseloginpractice.models.userModel;
+import com.calc.firebaseloginpractice.ui.chats.chatsFragment;
+import com.calc.firebaseloginpractice.ui.profile.profileFragment;
 import com.calc.firebaseloginpractice.ui.timeline.timeLineFragment;
+import com.calc.firebaseloginpractice.ui.welcome.welcomeFragment;
 import com.calc.firebaseloginpractice.utils.constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +45,7 @@ public class postComments extends Fragment
     private TextView userNameFiled;
     private TextView userImageFiled;
     private FloatingActionButton sendFab;
+    private Toolbar toolbar;
 
     private String commentName;
     private String commentImage;
@@ -48,12 +55,8 @@ public class postComments extends Fragment
 
     private TextView commentPostText;
     private ImageView commentPostImage;
-    private   TextView postLikeCount;
-    private   TextView postLike;
-
-    private ImageView commentUsernameImage;
-
-
+    private    TextView postLikeCount;
+    private    TextView postLike;
 
 
     @Nullable
@@ -66,11 +69,10 @@ public class postComments extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         initViews();
         getComment();
-        getPosts();
-
 
         // to get the data of the user who will leave the comment
         getUserData();
@@ -112,7 +114,7 @@ public class postComments extends Fragment
                     // to change the color once when we click like
 
                     textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
-                    textView.setText("Dislike");
+                    //textView.setText("Dislike");
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v)
@@ -147,42 +149,53 @@ public class postComments extends Fragment
 
 
     // get posts and show it on the comment at the top, not related to the writing comment down!
-    private void getPosts()
+   // private void getPosts()
     {
 
-        String postId= constants.postModel.getPostId();
+//        String postId= constants.postModel.getPostId();
+//        constants.getDatabaseReference().child("Posts").child(postId).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+//            {
+//
+//                    postModel model = dataSnapshot.getValue(postModel.class);
+//
+////                    String originalPostUserName=model.getUsername();
+////                    String originalPostUserImage=model.getUserImage();
+//
+//
+//                int type = model.getType();
+//
+//                 if(type==0)
+//                 {
+//
+//                     String originalPostUserPostText=model.getPostText();
+//                     commentPostText.setText(originalPostUserPostText);
+//
+//                 } else if (type == 1)
+//                 {
+//                     String originalPostUserPostText=model.getPostText();
+//                     commentPostText.setText(originalPostUserPostText);
+//                     String originalPostUserPostImage=model.getPostImage();
+//
+//
+//                     Picasso
+//                             .get()
+//                             .load(originalPostUserPostImage)
+//                             .into(commentPostImage);
+//                 }
+//
+//
+//
 
-        constants.getDatabaseReference().child("Posts").child(postId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-            {
-
-
-
-                    postModel model = dataSnapshot.getValue(postModel.class);
-
-//                    String originalPostUserName=model.getUsername();
-//                    String originalPostUserImage=model.getUserImage();
-                  String originalPostUserPostText=model.getPostText();
-                commentPostText.setText(originalPostUserPostText);
-                 String originalPostUserPostImage=model.getPostImage();
-
-                    Picasso
-                            .get()
-                            .load(originalPostUserPostImage)
-                            .into(commentPostImage);
-
-
-                setLikesCount(model.getPostId(), postLikeCount);
-                isLike(model.getPostId(), postLike);
-                }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            {
-
-            }
-        });
+//                }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError)
+//            {
+//
+//            }
+//        });
     }
 
     private void getUserData()
@@ -261,6 +274,7 @@ public class postComments extends Fragment
         userNameFiled=mainView.findViewById(R.id.comment_user_name);
         userImageFiled=mainView.findViewById(R.id.comment_user_image);
         sendFab=mainView.findViewById(R.id.send_comment_fab);
+        toolbar=mainView.findViewById(R.id.comments_toolbar);
 
         commentPostText=mainView.findViewById(R.id.post_text_comment);
         commentPostImage=mainView.findViewById(R.id.post_image_comment);
@@ -268,10 +282,32 @@ public class postComments extends Fragment
         postLikeCount=mainView.findViewById(R.id.post_like_comment_countfragment);
         postLike=mainView.findViewById(R.id.post_like_commentframent);
 
+        // this for the getPost, we have already in constants initialised  the post model in this method public static postModel postModel;
+        // we have to send the   constants.postModel= model; in on click comment method
+        int type = constants.postModel.getType();
+        if (type==0)
+        {
+
+            commentPostImage.setVisibility(View.GONE);
+            // this to get the post text local without getPost method
+            commentPostText.setText(constants.postModel.getPostText());
+
+            setLikesCount(constants.postModel.getPostId(), postLikeCount);
+            isLike(constants.postModel.getPostId(), postLike);
+
+
+        } else
+        {
+            // this to get the post text local without getImage method
+            Picasso.get().load(constants.postModel.getPostImage()).into(commentPostImage);
+            commentPostText.setText(constants.postModel.getPostText());
+
+            setLikesCount(constants.postModel.getPostId(), postLikeCount);
+            isLike(constants.postModel.getPostId(), postLike);
+        }
+
         // commentUsernameImage=itemView.findViewById(R.id.post_user_image);
-
-
-
+        
         commentModels= new ArrayList<>();
 
         sendFab.setOnClickListener(new View.OnClickListener() {
@@ -288,6 +324,36 @@ public class postComments extends Fragment
                     sendComment(comment);
                 }
 
+            }
+        });
+
+
+        toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item)
+            {
+                switch (item.getItemId())
+                {
+                    case R.id.main_logout_btn:
+                        constants.getAuth().signOut();
+                        constants.saveUid(requireActivity(),"empty");
+                        constants.replaceFragment(postComments.this,new welcomeFragment(),false);
+                        break;
+                    case R.id.main_settings_btn:
+                        constants.replaceFragment(postComments.this,new profileFragment(),true);
+
+                        break;
+                }
+                return false;
+            }
+        });
+
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_white_ios_24);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().onBackPressed();
             }
         });
 
@@ -367,9 +433,6 @@ public class postComments extends Fragment
             }
 
 
-
-
-
         @Override
         public int getItemCount() {
             return commentModelList.size();
@@ -383,18 +446,22 @@ public class postComments extends Fragment
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                 {
-                    if (dataSnapshot.hasChild(constants.getUid(requireActivity()))) {
-                        // to change the color once when we click like
-                        textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
-                        textView.setText("Dislike");
-                        textView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
+                    if (dataSnapshot.hasChild(constants.getUid(requireActivity())))
+                    {
+                        if (textView!=null)
+                        {
+                            // to change the color once when we click like
+                            textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
+                            textView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
 
-                            }
-                        });
+                                }
+                            });
+                        }
+
                     } else
                     {
                         textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.dislike));
@@ -436,6 +503,7 @@ public class postComments extends Fragment
                 time=itemView.findViewById(R.id.comment_time);
                 commentUserImage=itemView.findViewById(R.id.comment_user_image);
                 commentUserName=itemView.findViewById(R.id.comment_user_name);
+
 
 
 
