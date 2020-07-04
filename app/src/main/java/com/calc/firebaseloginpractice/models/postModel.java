@@ -7,14 +7,12 @@ public class postModel
     private long postTime;
     private String postText;
     private String postImage;
-
     // to say if this post has image or no, we have to put this int type
     private int type;
-
     private String postId;
+    private String uId;
 
-
-    public postModel(String userImage, String username, long postTime, String postText, String postImage, int type, String postId) {
+    public postModel(String userImage, String username, long postTime, String postText, String postImage, int type, String postId, String uId) {
         this.userImage = userImage;
         this.username = username;
         this.postTime = postTime;
@@ -22,6 +20,7 @@ public class postModel
         this.postImage = postImage;
         this.type = type;
         this.postId = postId;
+        this.uId = uId;
     }
 
     public postModel() {
@@ -81,5 +80,13 @@ public class postModel
 
     public void setPostId(String postId) {
         this.postId = postId;
+    }
+
+    public String getuId() {
+        return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 }

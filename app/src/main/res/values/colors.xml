@@ -8,4 +8,17 @@
     <color name="like">#03A9F4</color>
     <color name="dislike">#888888</color>
     <color name="green">#408743</color>
+    <color name="orange">#B58E54</color>
+    <color name="pink">#92D83559</color>
+    <color name="strongpink">#FDA5B9</color>
+    <color name="darkGray">#A41C2B3B</color>
+
+    <!--colors for profile-->
+    <color name="profilePrimaryDark">#FF3B30</color>
+    <color name="profileAccentColor">#F7F7F7</color>
+    <color name="whiteTextColor">#fff</color>
+    <color name="profileBackground">#fff</color>
+    <color name="blackTextColor">#000</color>
+    <color name="profileEditTextColor">#707070</color>
+
 </resources>

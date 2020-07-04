@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Press on users to chat"
         android:layout_margin="20dp"
-        android:textSize="15dp"/>
+        android:textSize="15sp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/users_recycler"

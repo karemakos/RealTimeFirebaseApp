@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class postComments extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         initViews();
         getComment();
@@ -112,7 +114,7 @@ public class postComments extends Fragment
                     // to change the color once when we click like
 
                     textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
-                    textView.setText("Dislike");
+                    //textView.setText("Dislike");
                     textView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v)
@@ -304,14 +306,8 @@ public class postComments extends Fragment
             isLike(constants.postModel.getPostId(), postLike);
         }
 
-
-
-
-
         // commentUsernameImage=itemView.findViewById(R.id.post_user_image);
-
-
-
+        
         commentModels= new ArrayList<>();
 
         sendFab.setOnClickListener(new View.OnClickListener() {
@@ -450,18 +446,22 @@ public class postComments extends Fragment
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                 {
-                    if (dataSnapshot.hasChild(constants.getUid(requireActivity()))) {
-                        // to change the color once when we click like
-                        textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
-                        textView.setText("Dislike");
-                        textView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
+                    if (dataSnapshot.hasChild(constants.getUid(requireActivity())))
+                    {
+                        if (textView!=null)
+                        {
+                            // to change the color once when we click like
+                            textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
+                            textView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
 
-                            }
-                        });
+                                }
+                            });
+                        }
+
                     } else
                     {
                         textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.dislike));

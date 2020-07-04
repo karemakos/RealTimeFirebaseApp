@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calc.firebaseloginpractice.R;
+import com.calc.firebaseloginpractice.models.chatModel;
 import com.calc.firebaseloginpractice.models.userModel;
 import com.calc.firebaseloginpractice.ui.chats.chatsFragment;
 import com.calc.firebaseloginpractice.utils.constants;
@@ -31,6 +33,7 @@ public class usersFragment extends Fragment
     private View mainView;
     private RecyclerView recyclerView;
     private List<userModel> userModels;
+    private List<chatModel> chatModelList;
 
 
     @Nullable
@@ -44,7 +47,7 @@ public class usersFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
        // constants.initProgress(getContext(),"Please wait...");
-        initViewa();
+        initViews();
         getUsers();
 
 }
@@ -85,7 +88,7 @@ public class usersFragment extends Fragment
         });
     }
 
-    private void initViewa()
+    private void initViews()
     {
         recyclerView=mainView.findViewById(R.id.users_recycler);
         DividerItemDecoration dividerItemDecoration= new DividerItemDecoration(requireActivity(),DividerItemDecoration.VERTICAL);
@@ -99,6 +102,7 @@ public class usersFragment extends Fragment
     private class usersAdapter extends RecyclerView.Adapter<usersAdapter.VH>
     {
         List<userModel> userModelsList;
+
 
         usersAdapter(List<userModel> userModelsList)
         {
@@ -125,6 +129,7 @@ public class usersFragment extends Fragment
             holder.userName.setText(name);
             holder.userAddress.setText(address);
 
+
             Picasso
                     .get()
                     .load(image)
@@ -135,11 +140,13 @@ public class usersFragment extends Fragment
                 public void onClick(View v)
                 {
                     constants.replaceFragment(usersFragment.this, new chatsFragment(),true);
-
                     // this is to take the person info that we pressed on it to chat
                     constants.myChats= model;
                 }
+
             });
+
+
         }
 
         @Override
@@ -153,6 +160,11 @@ public class usersFragment extends Fragment
             private   CircleImageView userImage;
             private    TextView userName;
             private   TextView userAddress;
+            private   TextView messageTv;
+            ImageView seenOne;
+            ImageView seenTwo;
+            private   TextView time;
+
 
             VH(@NonNull View itemView) {
                 super(itemView);
@@ -160,7 +172,12 @@ public class usersFragment extends Fragment
               userName=itemView.findViewById(R.id.user_name);
               userAddress=itemView.findViewById(R.id.user_address);
               userImage=itemView.findViewById(R.id.user_image);
+                seenOne=itemView.findViewById(R.id.users_seen_one);
+                seenTwo=itemView.findViewById(R.id.users_seen_two);
+                time=itemView.findViewById(R.id.users_time_text);
+                messageTv=itemView.findViewById(R.id.message_filed);
             }
         }
     }
 }
+

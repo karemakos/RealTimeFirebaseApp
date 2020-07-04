@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.calc.firebaseloginpractice.R;
+import com.calc.firebaseloginpractice.models.chatModel;
 import com.calc.firebaseloginpractice.models.postModel;
+import com.calc.firebaseloginpractice.models.roomsChatsModel;
+import com.calc.firebaseloginpractice.models.roomsModel;
 import com.calc.firebaseloginpractice.models.userModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -22,10 +25,13 @@ public  class constants
     //we create this empty cuz we will full it once when we press on any user we wanna chat wz
     public static userModel myChats;
 
+    public static roomsModel roomsModel;
+
+    public static roomsChatsModel roomsChatsModels;
+    public static chatModel chatModels;
 
     // this is to use it for the comments
     public static postModel postModel;
-
 
     private static ProgressDialog progressDialog;
 
