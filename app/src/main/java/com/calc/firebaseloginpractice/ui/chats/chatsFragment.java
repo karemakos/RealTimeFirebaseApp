@@ -152,7 +152,7 @@ public class chatsFragment extends Fragment
                 .load(constants.myChats.getImageUri())
                 .into(chatUserImage);
     }
-
+//
     private void sendMessage(String message)
     {
         final String senderId =constants.getUid(requireActivity());
