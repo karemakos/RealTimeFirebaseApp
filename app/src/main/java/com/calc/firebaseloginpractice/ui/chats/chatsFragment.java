@@ -235,6 +235,8 @@ public class chatsFragment extends Fragment
             String id= model.getSenderId();
             long time= model.getTime();
 
+            constants.chatModels=model;
+
 
             holder.message.setText(message);
 
@@ -244,15 +246,15 @@ public class chatsFragment extends Fragment
 
             if (id.equals(constants.getUid(requireActivity())))
             {
+                holder.sender.setGravity(Gravity.START);
                 holder.chatLinear.setGravity(Gravity.END);
-                holder.card.setCardBackgroundColor(getResources().getColor(R.color.green));
+               holder.sender.setBackground(getResources().getDrawable(R.drawable.speech_bubble_nine_patch_user));
                 holder.message.setTextColor(getResources().getColor(R.color.white));
                 holder.time.setTextColor(getResources().getColor(R.color.white));
 
             } else if (id.equals(constants.myChats.getUid()))
             {
-                holder.chatLinear.setGravity(Gravity.START);
-                holder.card.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
+                holder.sender.setGravity(Gravity.END);
                 holder.message.setTextColor(getResources().getColor(R.color.white));
                 holder.time.setTextColor(getResources().getColor(R.color.white));
             }
@@ -317,6 +319,8 @@ public class chatsFragment extends Fragment
             ImageView seenTwo;
             private CardView card;
             private LinearLayout chatLinear;
+            private LinearLayout receiver;
+            private LinearLayout sender;
 
             VH(@NonNull View itemView) {
                 super(itemView);
@@ -324,6 +328,7 @@ public class chatsFragment extends Fragment
                 message=itemView.findViewById(R.id.chat_message_text);
                 time=itemView.findViewById(R.id.chat_time_text);
                 card=itemView.findViewById(R.id.chat_card);
+                sender=itemView.findViewById(R.id.receiver_linear);
                 chatLinear=itemView.findViewById(R.id.chat_linear);
                 seenOne=itemView.findViewById(R.id.chat_seen_one);
                 seenTwo=itemView.findViewById(R.id.chat_seen_two);

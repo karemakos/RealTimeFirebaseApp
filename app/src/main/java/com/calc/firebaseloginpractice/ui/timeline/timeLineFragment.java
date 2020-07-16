@@ -145,8 +145,11 @@ public class timeLineFragment extends Fragment
         {
              final postModel model= postModelList.get(position);
 
+             constants.postModel=model;
             // to say if this post has image or no, we have to put this int type
             int type = model.getType();
+
+
             // if post without photo in the post to share
             if (type == 0)
             {
@@ -156,6 +159,7 @@ public class timeLineFragment extends Fragment
                 final long time = model.getPostTime();
                 final String userImage = model.getUserImage();
                 String text = model.getPostText();
+
 
 
 
@@ -181,8 +185,38 @@ public class timeLineFragment extends Fragment
                         .load(userImage)
                         .into(holder.post_user_image);
 
+
+
                 setLikesCount(model.getPostId(),holder.postLikeCount);
+                setCommentCount(model.getPostId(),holder.postCommentCount);
                 isLike(model.getPostId(), holder.postLike);
+
+              isDeleted(model.getPostId(),model.getuId(),holder.postdelete);
+
+
+
+                // to delete my post
+                constants.getDatabaseReference().child("Posts").child(model.getPostId()).child(constants.getUid(requireActivity())).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                    {
+
+                        holder.postdelete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                constants.getDatabaseReference().child("Posts").child(model.getPostId()).removeValue();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
                 holder.postComment.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -202,6 +236,28 @@ public class timeLineFragment extends Fragment
                 String text = model.getPostText();
                 String image = model.getPostImage();
 
+
+
+                // to delete my post
+                constants.getDatabaseReference().child("Posts").child(model.getPostId()).child(constants.getUid(requireActivity())).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                    {
+
+                        holder.postdelete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                constants.getDatabaseReference().child("Posts").child(model.getPostId()).removeValue();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
 
 
@@ -227,8 +283,16 @@ public class timeLineFragment extends Fragment
 
                 setLikesCount(model.getPostId(),holder.postLikeCount);
 
+                setCommentCount(model.getPostId(),holder.postCommentCount);
+
                 // we call this method to change the color once when we click on it
                 isLike(model.getPostId(), holder.postLike);
+
+                isDeleted(model.getPostId(),model.getuId(),holder.postdelete);
+
+
+          // isLike(model.getPostId(), holder.postComment);
+
 
             }
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -255,10 +319,13 @@ public class timeLineFragment extends Fragment
                     String uId= constants.myChats.getUid();
                     constants.replaceFragment(timeLineFragment.this,new profileFragment(),true);
 
-
                 }
             });
+
+
+
         }
+
 
         @Override
         public int getItemCount() {
@@ -266,15 +333,6 @@ public class timeLineFragment extends Fragment
 
         }
 
-        // we create this method for the likes
-//     void setLike (String postId)
-//    {
-//        // So, this will create on firebase file called Likes and down to it, the PostId and down to the postId myID+whatever id has done like
-//       //   likesModel model= new likesModel(constants.getUid(requireActivity()));
-//
-//            constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).setValue(true);
-//
-//    }
 
       void setLikesCount( final String idPost, final TextView textView)
       {
@@ -300,6 +358,29 @@ public class timeLineFragment extends Fragment
            });
       }
 
+        void setCommentCount( final String idPost, final TextView textView)
+        {
+            constants.getDatabaseReference().child("Comments").child(idPost).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    long count = dataSnapshot.getChildrenCount();
+                    if (count>0)
+                    {
+                        textView.setVisibility(View.VISIBLE);
+                        textView.setText(count+" Comments");
+                    } else
+                    {
+                        textView.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
 
 
 
@@ -309,9 +390,9 @@ public class timeLineFragment extends Fragment
               @Override
               public void onDataChange(@NonNull DataSnapshot dataSnapshot)
               {
-                  if (dataSnapshot.hasChild(constants.getUid(requireActivity()))) {
-                      if (textView!=null)
-                      {
+                  if (getActivity()!=null)
+                  {
+                      if (dataSnapshot.hasChild(constants.getUid(getActivity()))) {
                           // to change the color once when we click like
                           textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(),R.color.like));
                           textView.setOnClickListener(new View.OnClickListener() {
@@ -322,21 +403,22 @@ public class timeLineFragment extends Fragment
 
                               }
                           });
+
+                      } else
+                      {
+                          textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(), R.color.dislike));
+                          textView.setText("Like");
+                          textView.setOnClickListener(new View.OnClickListener() {
+                              @Override
+                              public void onClick(View v)
+                              {
+                                  constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).setValue(true);
+
+                              }
+                          });
                       }
-
-                  } else
-                  {
-                      textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.dislike));
-                      textView.setText("Like");
-                      textView.setOnClickListener(new View.OnClickListener() {
-                          @Override
-                          public void onClick(View v)
-                          {
-                              constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).setValue(true);
-
-                          }
-                      });
                   }
+
 
               }
 
@@ -346,6 +428,36 @@ public class timeLineFragment extends Fragment
               }
           });
       }
+
+
+
+        void isDeleted(final String postId, final String uId, final TextView textView)
+        {
+            constants.getDatabaseReference().child("Posts").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                  if (uId.equals(constants.getUid(requireActivity())))
+                  {
+                      textView.setVisibility(View.VISIBLE);
+                  }
+
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+
+
+
+
         private class VH extends RecyclerView.ViewHolder
         {
            private   CircleImageView post_user_image;
@@ -356,8 +468,9 @@ public class timeLineFragment extends Fragment
             private    TextView postText;
             private    TextView postLikeCount;
             private     TextView postLike;
+            private     TextView postdelete;
+            private     TextView postCommentCount;
             private    TextView postComment;
-            private   TextView postShare;
             boolean isTextViewClicked = false;
 
 
@@ -368,13 +481,15 @@ public class timeLineFragment extends Fragment
                 post_user_image=itemView.findViewById(R.id.post_user_image);
                 linearLayout=itemView.findViewById(R.id.user_info_linear);
                 post_image=itemView.findViewById(R.id.post_image);
+                postdelete=itemView.findViewById(R.id.timeline_delete_post);
                 postUserName=itemView.findViewById(R.id.post_user_name);
                 postTime=itemView.findViewById(R.id.post_time);
                 postText=itemView.findViewById(R.id.post_text);
                 postLikeCount=itemView.findViewById(R.id.post_likeCount);
+                postCommentCount=itemView.findViewById(R.id.post_commentCount);
                 postLike=itemView.findViewById(R.id.post_like);
                 postComment=itemView.findViewById(R.id.timeline_add_comment);
-                postShare=itemView.findViewById(R.id.post_share);
+
 
 
 

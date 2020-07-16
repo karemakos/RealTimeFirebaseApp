@@ -14,8 +14,9 @@
         app:titleTextColor="@color/white"/>
 
     <androidx.core.widget.NestedScrollView
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -23,11 +24,55 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:padding="20dp"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/user_info_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/post_comment_user_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/m"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                >
+
+                <TextView
+                    android:id="@+id/post_comment_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Karim Keldek"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/post_comment_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="30 m ago "/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
 
         <TextView
             android:id="@+id/post_text_comment"
@@ -106,19 +151,7 @@
                 android:focusable="true"
                 android:clickable="true"/>
 
-            <TextView
-                android:id="@+id/post_share"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="share"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableStart="@drawable/ic_screen_share_black_24dp"
-                android:drawableTint="@color/dislike"
-                android:focusable="true"
-                android:clickable="true"
-                android:visibility="gone"/>
+
 
         </LinearLayout>
         <View
@@ -140,14 +173,26 @@
     </LinearLayout>
 
 
+
+
+
+</LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
     <LinearLayout
+
+        android:id="@+id/type_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+
         >
 
         <EditText
+
             android:id="@+id/comment_body_field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -171,11 +216,6 @@
 
             />
     </LinearLayout>
-
-</LinearLayout>
-
-
-    </androidx.core.widget.NestedScrollView>
 
 
 

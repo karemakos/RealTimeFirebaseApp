@@ -1,6 +1,5 @@
 package com.calc.firebaseloginpractice.ui.rooms;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +9,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calc.firebaseloginpractice.R;
 import com.calc.firebaseloginpractice.models.roomsModel;
-import com.calc.firebaseloginpractice.ui.profile.profileFragment;
-import com.calc.firebaseloginpractice.ui.welcome.welcomeFragment;
+import com.calc.firebaseloginpractice.ui.rooms.roomrRequests.roomsRequestsFragment;
 import com.calc.firebaseloginpractice.utils.constants;
-import com.google.android.material.datepicker.SingleDateSelector;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -49,7 +45,7 @@ public class myRoomsFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-         constants.initProgress(getContext(),"Please wait...");
+        // constants.initProgress(getContext(),"Please wait...");
 
         initViews();
         getMyRooms();
@@ -80,8 +76,12 @@ public class myRoomsFragment extends Fragment
                     roomsModel model = d.getValue(roomsModel.class);
 
                     String id = constants.getUid(requireActivity());
-                    if (id.equals(model.getuId()))
-                        roomsModels.add(model);
+                    if (model!=null)
+                    {
+                        if (id.equals(model.getuId()))
+                            roomsModels.add(model);
+                    }
+
                 }
 
                 recyclerView.setAdapter(new roomsAdapter(roomsModels));
@@ -135,7 +135,7 @@ public class myRoomsFragment extends Fragment
 
 
             setRoomMembers(model.getRoomId(), holder.roomMembers);
-            setRoomRequests(model.getRoomId(), holder.roomRequests);
+            setRoomRequests(model.getRoomId(),holder.roomRequests);
 
             if (model.isPrivate()) {
                 holder.privateRoom.setVisibility(View.VISIBLE);
@@ -151,23 +151,34 @@ public class myRoomsFragment extends Fragment
             });
 
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            if (!model.isPrivate())
+            {
+                holder.requestsMyPvRoom.setVisibility(View.GONE);
+            }
+
+            holder.requestsMyPvRoom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
-                    if (model.isPrivate())
-                    {
+
                         constants.roomsModel= model;
-                        constants.replaceFragment(myRoomsFragment.this,new roomsRequestsFragment(),true);
-                    }
-                    else
-                    {
-                        constants.roomsModel= model;
-                        constants.replaceFragment(myRoomsFragment.this,new roomsChatFragment(),true);
-                    }
+                       constants.replaceFragment(myRoomsFragment.this,new roomsRequestsFragment(),true);
 
                 }
             });
+
+            holder.joinMyPvRoom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+
+                        constants.roomsModel= model;
+                        constants.replaceFragment(myRoomsFragment.this,new roomsChatFragment(),true);
+
+                }
+            });
+
+
         }
 
 
@@ -192,22 +203,18 @@ public class myRoomsFragment extends Fragment
 
             void setRoomRequests(String roomId, final TextView textView)
             {
-                String uId = constants.getUid(requireActivity());
+             String uId = constants.getUid(requireActivity());
 
-                constants.getDatabaseReference().child("RoomsRequests").child(uId).child(roomId).addValueEventListener(new ValueEventListener()
+                constants.getDatabaseReference().child("RoomsRequests").child(roomId).addValueEventListener(new ValueEventListener()
                 {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                     {
                         long count = dataSnapshot.getChildrenCount();
 
-                        //if (count == 0)
-                     //   {
-                         //  textView.setVisibility(View.GONE);
-                     //   } else
                         {
                             textView.setVisibility(View.VISIBLE);
-                            textView.setText("requests " + count);
+                            textView.setText("requests:  " + count);
                         }
                     }
 
@@ -220,8 +227,6 @@ public class myRoomsFragment extends Fragment
             }
 
 
-
-
         @Override
         public int getItemCount() {
             return roomsModelList.size();
@@ -232,6 +237,8 @@ public class myRoomsFragment extends Fragment
         {
 
             CircleImageView roomOwnerImage;
+            TextView  joinMyPvRoom;
+            TextView  requestsMyPvRoom;
             ImageView privateRoom;
             TextView roomTitle;
             TextView roomMembers;
@@ -243,6 +250,8 @@ public class myRoomsFragment extends Fragment
 
                 roomOwnerImage = itemView.findViewById(R.id.room_user_image);
                 privateRoom = itemView.findViewById(R.id.private_room);
+                requestsMyPvRoom = itemView.findViewById(R.id.requests_private_room);
+                joinMyPvRoom = itemView.findViewById(R.id.join_my_private_room);
                 roomTitle = itemView.findViewById(R.id.room_title);
                 roomMembers = itemView.findViewById(R.id.myRoom_members);
                 roomRequests = itemView.findViewById(R.id.myRoom_requests);

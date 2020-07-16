@@ -3,4 +3,23 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="headerTextSize">28sp</dimen>
+
+
+    <dimen name="button_boot_margin">16dp</dimen>
+    <dimen name="enter_mesg_margin">5dp</dimen>
+    <dimen name="mesg_margin">10dp</dimen>
+    <dimen name="mesg_name_margin">10dp</dimen>
+
+    <dimen name="list_msg_margin">10dp</dimen>
+
+    <dimen name="text_size_small">15dp</dimen>
+    <dimen name="text_size_medium">20dp</dimen>
+    <dimen name="text_size_big">30dp</dimen>
+
+    <dimen name="speech_bubble_corners">10dp</dimen>
+    <dimen name="speech_bubble_corners_plus_tail">15dp</dimen>
+    <dimen name="speech_bubble_spacing">5dp</dimen>
+    <dimen name="speech_bubble_tail">25dp</dimen>
+
+
 </resources>

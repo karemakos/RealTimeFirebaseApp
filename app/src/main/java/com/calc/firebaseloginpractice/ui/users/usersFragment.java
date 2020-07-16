@@ -1,6 +1,7 @@
 package com.calc.firebaseloginpractice.ui.users;
 
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,11 +69,19 @@ public class usersFragment extends Fragment
                 {
                     userModel model= d.getValue(userModel.class);
 
-                    // this to dont see myself on the chat list from the mainpage cuz not logic to chat with myself
-                    if (!model.getUid().equals(constants.getUid(requireActivity())))
+                    if (getActivity()!=null)
                     {
-                        userModels.add(model);
+                        if (model!=null)
+                        {
+                            // this to dont see myself on the chat list from the mainpage cuz not logic to chat with myself
+                            if (!model.getUid().equals(constants.getUid(requireActivity())))
+                            {
+                                userModels.add(model);
+                            }
+                        }
+
                     }
+
                 }
 
                 recyclerView.setAdapter(new usersAdapter(userModels));
@@ -123,12 +132,18 @@ public class usersFragment extends Fragment
             final userModel model= userModelsList.get(position);
 
             String name= model.getName();
-            String address= model.getAddress();
+           // String address= model.getAddress();
             String image= model.getImageUri();
 
             holder.userName.setText(name);
-            holder.userAddress.setText(address);
+         //   holder.userAddress.setText(address);
 
+
+
+
+
+            setTime(model,holder.time);
+            showMessage(model,holder.userLastMessage);
 
             Picasso
                     .get()
@@ -155,27 +170,100 @@ public class usersFragment extends Fragment
         }
 
 
+        void setTime(userModel userModel, final TextView textView)
+        {
+            constants.getDatabaseReference().child("Chats").child(constants.getUid(requireActivity())).child(userModel.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    List<chatModel> chatModelsList = new ArrayList<>();
+
+                    for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
+                    {
+                        chatModel chatModel= dataSnapshot1.getValue(chatModel.class);
+                        chatModelsList.add(chatModel);
+                    }
+
+                    for(int i = 0 ; i < chatModelsList.size() ; i ++)
+                    {
+                        if (i == chatModelsList.size() - 1)
+                        {
+                            long now = System.currentTimeMillis();
+                            CharSequence ago =   DateUtils.getRelativeTimeSpanString(chatModelsList.get(i).getTime(), now, DateUtils.MINUTE_IN_MILLIS);
+                            textView.setText(ago);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+        void showMessage(userModel userModel, final TextView textView)
+        {
+            constants.getDatabaseReference().child("Chats").child(constants.getUid(requireActivity())).child(userModel.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    List<chatModel> chatModelsList = new ArrayList<>();
+
+                    for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren())
+                    {
+                        chatModel model= dataSnapshot1.getValue(chatModel.class);
+                        chatModelsList.add(model);
+                    }
+
+                    for(int i = 0 ; i < chatModelsList.size() ; i ++)
+                    {
+                        if (i == chatModelsList.size() - 1)
+                        {
+                            String message= chatModelsList.get(i).getMessage();
+                            textView.setText(message);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+
+
         private class VH extends RecyclerView.ViewHolder
         {
             private   CircleImageView userImage;
             private    TextView userName;
-            private   TextView userAddress;
-            private   TextView messageTv;
+            private   TextView userLastMessage;
             ImageView seenOne;
             ImageView seenTwo;
             private   TextView time;
+            boolean isTextViewClicked = false;
 
 
             VH(@NonNull View itemView) {
                 super(itemView);
 
               userName=itemView.findViewById(R.id.user_name);
-              userAddress=itemView.findViewById(R.id.user_address);
+                userLastMessage=itemView.findViewById(R.id.user_lastMessage);
               userImage=itemView.findViewById(R.id.user_image);
                 seenOne=itemView.findViewById(R.id.users_seen_one);
                 seenTwo=itemView.findViewById(R.id.users_seen_two);
                 time=itemView.findViewById(R.id.users_time_text);
-                messageTv=itemView.findViewById(R.id.message_filed);
+
+
+
+                if (isTextViewClicked) {
+                    userLastMessage.setMaxLines(1);
+                    isTextViewClicked = false;
+                }
             }
         }
     }

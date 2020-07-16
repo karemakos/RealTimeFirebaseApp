@@ -59,6 +59,7 @@ public class roomsChatFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+     constants.initProgress(getContext(),"Please wait...");
         initViews();
         getData();
         getChatRooms();
@@ -77,6 +78,8 @@ public class roomsChatFragment extends Fragment
                     // this methods 4 going to the users Node and bring the data from there
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                     {
+                        constants.dismissProgress();
+
                         roomsChatsModels.clear();
                         for (DataSnapshot d : dataSnapshot.getChildren())
                         {
@@ -88,7 +91,6 @@ public class roomsChatFragment extends Fragment
 
                         // to scroll the chat to last position
                         recyclerView.scrollToPosition(roomsChatsModels.size()-1);
-                        constants.dismissProgress();
                     }
 
                     @Override
@@ -150,11 +152,13 @@ public class roomsChatFragment extends Fragment
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 requireActivity().onBackPressed();
-                constants.dismissProgress();
+
             }
         });
 
+       // constants.dismissProgress();
 
     }
 
@@ -211,7 +215,6 @@ public class roomsChatFragment extends Fragment
         }
 
     }
-
 
     private class roomschatAdapter extends RecyclerView.Adapter<roomschatAdapter.VH> {
         List<roomsChatsModel> roomsChatsModelList;

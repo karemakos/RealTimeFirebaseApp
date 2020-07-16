@@ -23,6 +23,7 @@
     android:layout_height="50dp"
     android:src="@drawable/m"/>
 
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,6 +47,8 @@
 
     </LinearLayout>
 
+
+
 </LinearLayout>
 
     <TextView
@@ -60,7 +63,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:ellipsize="end"
-        android:maxLines="2"/>
+        android:maxLines="2"
+        />
 
     <ImageView
         android:id="@+id/post_image"
@@ -70,16 +74,37 @@
         />
 
 
-
-<TextView
-    android:id="@+id/post_likeCount"
-    android:layout_width="wrap_content"
+<LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="20 likes"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="10dp"
-    android:visibility="gone"
-    />
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/post_likeCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="20 likes"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/post_commentCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="20 comments"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        />
+</LinearLayout>
+
+
+
 
 
 
@@ -99,7 +124,6 @@
         android:orientation="horizontal"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-
        >
 
         <TextView
@@ -117,6 +141,9 @@
             android:clickable="true"
             />
 
+
+
+
         <TextView
             android:id="@+id/timeline_add_comment"
             android:layout_width="0dp"
@@ -131,6 +158,19 @@
             android:clickable="true"/>
 
 
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/timeline_delete_post"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableStart="@drawable/ic_delete_black_24dp"
+            android:drawableTint="@color/dislike"
+            android:visibility="gone"
+            />
 
     </LinearLayout>
      <View

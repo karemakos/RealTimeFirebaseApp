@@ -1,7 +1,9 @@
 package com.calc.firebaseloginpractice.ui.timeline.posts.postComments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -43,6 +46,8 @@ public class postComments extends Fragment
     private RecyclerView recyclerView;
     private EditText chatFiled;
     private TextView userNameFiled;
+
+
     private TextView userImageFiled;
     private FloatingActionButton sendFab;
     private Toolbar toolbar;
@@ -51,10 +56,16 @@ public class postComments extends Fragment
     private String commentImage;
 
     private List<commentModel> commentModels;
+    private List<postModel> postModels;
 
 
     private TextView commentPostText;
     private ImageView commentPostImage;
+
+    private TextView posterName;
+    private ImageView posterImage;
+    private TextView posterTime;
+
     private    TextView postLikeCount;
     private    TextView postLike;
 
@@ -90,6 +101,7 @@ public class postComments extends Fragment
                 {
                     textView.setVisibility(View.VISIBLE);
                     textView.setText(count+"likes");
+
                 } else
                 {
                     textView.setVisibility(View.GONE);
@@ -110,31 +122,36 @@ public class postComments extends Fragment
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                if (dataSnapshot.hasChild(constants.getUid(requireActivity()))) {
-                    // to change the color once when we click like
-
-                    textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
-                    //textView.setText("Dislike");
-                    textView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
-
-                        }
-                    });
-                } else
+                if(getActivity()!=null)
                 {
-                    textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.dislike));
-                    textView.setText("Like");
-                    textView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).setValue(true);
+                    if (dataSnapshot.hasChild(constants.getUid(requireActivity()))) {
+                        // to change the color once when we click like
 
-                        }
-                    });
+
+                        textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(), R.color.like));
+                        //textView.setText("Dislike");
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
+
+                            }
+                        });
+                    } else
+                    {
+                        textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(), R.color.dislike));
+                        textView.setText("Like");
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).setValue(true);
+
+                            }
+                        });
+                    }
+
                 }
 
             }
@@ -278,6 +295,9 @@ public class postComments extends Fragment
 
         commentPostText=mainView.findViewById(R.id.post_text_comment);
         commentPostImage=mainView.findViewById(R.id.post_image_comment);
+        posterName=mainView.findViewById(R.id.post_comment_user_name);
+        posterImage=mainView.findViewById(R.id.post_comment_user_image);
+        posterTime=mainView.findViewById(R.id.post_comment_time);
 
         postLikeCount=mainView.findViewById(R.id.post_like_comment_countfragment);
         postLike=mainView.findViewById(R.id.post_like_commentframent);
@@ -292,6 +312,18 @@ public class postComments extends Fragment
             // this to get the post text local without getPost method
             commentPostText.setText(constants.postModel.getPostText());
 
+            posterName.setText(constants.postModel.getUsername());
+            Picasso
+                    .get()
+                    .load(constants.postModel.getUserImage())
+                    .into(posterImage);
+
+            long time= constants.postModel.getPostTime();
+            long now = System.currentTimeMillis();
+            CharSequence ago =   DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
+            posterTime.setText(ago);
+
+
             setLikesCount(constants.postModel.getPostId(), postLikeCount);
             isLike(constants.postModel.getPostId(), postLike);
 
@@ -301,6 +333,18 @@ public class postComments extends Fragment
             // this to get the post text local without getImage method
             Picasso.get().load(constants.postModel.getPostImage()).into(commentPostImage);
             commentPostText.setText(constants.postModel.getPostText());
+
+            posterName.setText(constants.postModel.getUsername());
+            Picasso
+                    .get()
+                    .load(constants.postModel.getUserImage())
+                    .into(posterImage);
+
+            long time= constants.postModel.getPostTime();
+            long now = System.currentTimeMillis();
+            CharSequence ago =   DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
+            posterTime.setText(ago);
+
 
             setLikesCount(constants.postModel.getPostId(), postLikeCount);
             isLike(constants.postModel.getPostId(), postLike);
@@ -421,6 +465,7 @@ public class postComments extends Fragment
                     .into(holder.commentUserImage);
 
 
+
             long time= model.getTime();
             long now = System.currentTimeMillis();
             CharSequence ago =   DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
@@ -429,6 +474,10 @@ public class postComments extends Fragment
             holder.comment.setText(comment);
             holder.commentUserName.setText(userName);
 
+
+
+            setLikesCount(model.getId(),holder.commentlikeCount);
+            isLike(model.getId(), holder.commentLike);
 
             }
 
@@ -439,41 +488,27 @@ public class postComments extends Fragment
         }
 
 
-
-        void isLike(final String postId, final TextView textView)
+        void setLikesCount( final String idPost, final TextView textView)
         {
-            constants.getDatabaseReference().child("Likes").child(postId).addValueEventListener(new ValueEventListener() {
+            constants.getDatabaseReference().child("CommentLike").child(idPost).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot)
                 {
-                    if (dataSnapshot.hasChild(constants.getUid(requireActivity())))
+
+                    Activity activity=new Activity();
+                    if (!activity.equals(null))
                     {
-                        if (textView!=null)
+                        long count = dataSnapshot.getChildrenCount();
+
+                        if (count>0)
                         {
-                            // to change the color once when we click like
-                            textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.like));
-                            textView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).removeValue();
-
-                                }
-                            });
+                            textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(),R.color.profilePrimaryDark));
+                            textView.setVisibility(View.VISIBLE);
+                            textView.setText(" "+count);
+                        } else
+                        {
+                            textView.setVisibility(View.GONE);
                         }
-
-                    } else
-                    {
-                        textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(getContext(), R.color.dislike));
-                        textView.setText("Like");
-                        textView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v)
-                            {
-                                constants.getDatabaseReference().child("Likes").child(postId).child(constants.getUid(requireActivity())).setValue(true);
-
-                            }
-                        });
                     }
 
                 }
@@ -484,14 +519,72 @@ public class postComments extends Fragment
                 }
             });
         }
+
+
+
+        void isLike(final String postId, final TextView textView)
+        {
+            constants.getDatabaseReference().child("CommentLike").child(postId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    if (getActivity()!=null)
+                    {
+                        if (dataSnapshot.hasChild(constants.getUid(getActivity()))) {
+                            // to change the color once when we click like
+                            textView.setTextColor(getResources().getColor(R.color.profilePrimaryDark));
+                            textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(),R.color.profilePrimaryDark));
+                            textView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    constants.getDatabaseReference().child("CommentLike").child(postId).child(constants.getUid(requireActivity())).removeValue();
+
+                                }
+                            });
+
+                        } else
+                        {
+                           textView.setTextColor(getResources().getColor(R.color.dislike));
+
+                            textView.setCompoundDrawableTintList(ContextCompat.getColorStateList(requireActivity(),R.color.dislike));
+                            textView.setText(" Love");
+
+                            textView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    constants.getDatabaseReference().child("CommentLike").child(postId).child(constants.getUid(requireActivity())).setValue(true);
+
+                                }
+                            });
+                        }
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+
         private class VH extends RecyclerView.ViewHolder
         {
 
 
             private TextView comment;
+            private TextView commentLike;
+            private TextView commentlikeCount;
             private   TextView time;
             private TextView commentUserName;
             private ImageView commentUserImage;
+
+            boolean isTextViewClicked = false;
 
 
 
@@ -500,12 +593,31 @@ public class postComments extends Fragment
 
 
                 comment=itemView.findViewById(R.id.comment_message_text);
+                commentLike=itemView.findViewById(R.id.comment_like);
+                commentlikeCount=itemView.findViewById(R.id.comment_count_like);
                 time=itemView.findViewById(R.id.comment_time);
+
                 commentUserImage=itemView.findViewById(R.id.comment_user_image);
                 commentUserName=itemView.findViewById(R.id.comment_user_name);
 
 
 
+
+                // to expand the text view
+                comment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isTextViewClicked)
+                        {
+                            comment.setMaxLines(2);
+                            isTextViewClicked=false;
+                        } else
+                        {
+                            comment.setMaxLines(Integer.MAX_VALUE);
+                            isTextViewClicked=true;
+                        }
+                    }
+                });
 
             }
 

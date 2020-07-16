@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/room_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/m"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="20dp"
+            >
+
+
+            <TextView
+                android:id="@+id/room_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Karim Keldek"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/room_creator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Greece"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Members:  "
+                    />
+
+                <TextView
+                    android:id="@+id/room_members"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#637E7B"
+            app:cardMaxElevation="250dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Join"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:padding="10dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/mainRooms_private_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_lock_24"
+            android:visibility="gone"
+            />
+        <ImageView
+            android:id="@+id/opened_private_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_unlock_open_24"
+            android:visibility="visible"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

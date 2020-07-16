@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <Toolbar
+        android:id="@+id/newRoom_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="150dp"
+        app:titleTextColor="@color/white"/>
+
+
+    <TextView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chose photo"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_gravity="center"
+        android:id="@+id/pick_room_image"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/photopicker"
+        android:layout_marginBottom="10dp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add A New Room"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:padding="20dp"/>
+
+
+        <EditText
+            android:id="@+id/newRoom_filed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:hint="Write the room name here"
+            android:inputType="textPostalAddress" />
+
+
+        <CheckBox
+            android:id="@+id/private_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="private room"
+            android:textColor="@color/white"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/orange"
+            app:cardMaxElevation="250dp"
+            android:layout_margin="2dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="6dp"
+            >
+            <TextView
+                android:id="@+id/addNewRoom_btn"
+                android:layout_width="match_parent"
+                android:text="Add New Room"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
